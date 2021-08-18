@@ -27,7 +27,6 @@ const CustomController = ({ videoElement }) => {
     const handlePauseButton = () => {
         videoElement.pause()
         setPlayed(false)
-
     }
 
     return (

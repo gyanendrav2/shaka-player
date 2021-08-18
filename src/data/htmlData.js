@@ -21,7 +21,7 @@ export const htmlData = `
           width="100%"
           controls
           id="video"
-          src="https://dash.akamaized.net/dash264/TestCases/2c/qualcomm/1/MultiResMPEG2.mpd"
+          src="https://byju.pc.cdn.bitgravity.com/lv_media/mpkgr-staging-8e4ce246/qr4m5s/dash/h264.mpd"
         >
         </video>
       </div>

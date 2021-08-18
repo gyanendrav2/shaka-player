@@ -15,6 +15,7 @@ const useStyles = makeStyles({
 });
 
 function Solution() {
+
   const classes = useStyles();
   function initApp() {
     // Install built-in polyfills to patch browser incompatibilities.
@@ -61,6 +62,13 @@ function Solution() {
       // assigning video element to shaka player
       const player = new shaka.Player(item);
 
+      let drmConfig = {
+        servers: {
+          "com.widevine.alpha":
+            "https://mpkgr-staging-drmservice.tllms.com/license/widevine",
+        },
+      };
+
       //   // Fetch a paticular part of video
       // player.configure({
       //   playRangeStart: startSeekTime,
@@ -68,12 +76,27 @@ function Solution() {
       // });
 
       // // Add streaming, adaptibe bitrate, drm configurations to player
-      // player.configure({
-      //   streaming: { ...streamingConfig },
-      //   restrictions: { ...restrictions },
-      //   abr: { ...abrConfig },
-      //   drm: { ...drmConfig },
-      // });
+      player.configure({
+        streaming: {
+          bufferingGoal: 6,
+          bufferBehind: 1,
+          switchInterval: 4,
+        },
+        abr: {
+          restrictions: {
+            minBandwidth: 500000,
+          },
+        },
+        drm: { ...drmConfig },
+      });
+
+      player.getNetworkingEngine().registerRequestFilter((type, request) => {
+        if (type === 2) {
+          request.uris[0] += `/M6otvp2nkNYXwLjnJnRJBQ`;
+          request.headers["Content-Type"] = "application/octet-stream";
+          request.headers.Authorization = `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJtcGtnci1hcGkiLCJleHAiOjE2Mjc1NjA5NzYsImlhdCI6MTYyNzUzOTM3Nn0.GNX-nG4VlKZc813NRUDrIN4FgoVXPNl9WXNeyGXS3Eo`;
+        }
+      });
 
       // Listen for error events.
       player.addEventListener("error", onErrorEvent);
